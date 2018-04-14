@@ -1,0 +1,18 @@
+.search-todos {
+  height: 3rem;
+  margin-top:1rem;
+}
+
+.show-completed {
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.show-completed #showCompletedCheckbox {
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.show-completed label {
+  cursor: pointer;
+}

@@ -1,0 +1,14 @@
+.controls-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls-form .complete-button {
+  width: 20rem;
+  margin-right: 3px;
+}
+
+.controls-form .back-button {
+  width: 20rem;
+}

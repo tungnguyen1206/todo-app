@@ -1,0 +1,39 @@
+.todo {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  padding: 1rem;
+  transition: background .3s ease;
+};
+
+
+.todo p,input {
+  margin: 0;
+}
+
+/* Distance between checkbox and texts */
+.todo>:first-child {
+  margin-right: 2rem;
+}
+
+/* Background when transition */
+.todo:hover {
+  background: #f0f0f0;
+}
+
+
+/* Color of createdAt */
+.todo-subtext {
+  color: #999;
+}
+
+/* Text when the todo is completed */
+.todo-completed p {
+  color: #dddddd;
+  text-decoration: line-through;
+}
+
+.todo-completed .todo-subtext {
+  color: #dddddd;
+  text-decoration: line-through;
+}
