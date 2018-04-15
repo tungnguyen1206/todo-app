@@ -13,7 +13,7 @@ var TodoControls = require('./TodoControls');
 
 /* 
 * Require APIs */
-var TodoAPI = require('../../api/TodoAPI');
+var TodoElementAPI = require('../../api/TodoElementAPI');
 
 /* 
 * Define Todo component */
@@ -29,7 +29,7 @@ var TodoDetails = React.createClass({
     var _id = _TodoDetails.props.params.todoid;
 
     return {
-      todo: TodoAPI.getTodoById(_id)
+      todo: TodoElementAPI.getTodoById(_id)
     }
   },
 
@@ -38,7 +38,7 @@ var TodoDetails = React.createClass({
   componentWillUnmount: function() {
     var _newTodo = this.state.todo;
     var _id = _newTodo.id;
-    TodoAPI.updateTodoById(_id, _newTodo);
+    TodoElementAPI.updateTodoById(_id, _newTodo);
   },
 
   /* 

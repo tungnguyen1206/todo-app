@@ -18,7 +18,7 @@ var TodoSearch = require('./TodoSearch');
 
 /* 
 * Require APIs */
-var TodoAPI = require('../../api/TodoAPI');
+var TodoListAPI = require('../../api/TodoListAPI');
 
 /* 
 * Define Todo component */
@@ -30,7 +30,7 @@ var TodoApp = React.createClass({
     return {
       showCompleted: false,
       searchText: '',
-      todos: TodoAPI.getTodos(),
+      todos: TodoListAPI.getTodos(),
     }
   },
 
@@ -40,7 +40,7 @@ var TodoApp = React.createClass({
   * This method has some problems with tests: todos is not defined
   * How to fix it? */
   componentDidUpdate: function() {
-    TodoAPI.setTodos(this.state.todos);
+    TodoListAPI.setTodos(this.state.todos);
   },
 
   /* 
@@ -103,7 +103,7 @@ var TodoApp = React.createClass({
     var {todos, showCompleted, searchText} = _TodoApp.state;
 
     // Filtered list
-    var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
+    var filteredTodos = TodoListAPI.filterTodos(todos, showCompleted, searchText);
 
     return ( 
       <div>

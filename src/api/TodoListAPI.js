@@ -3,10 +3,10 @@
 var $ = require('jquery');
 
 /* 
-* This API is used to store and retrieve data from local storage
+* This API is used to store and retrieve array of data from local storage
 * module.exports is an object
 * */
-var TodoAPI = {
+var TodoListAPI = {
   /* 
   * Save todo to local storage */
   setTodos: function(_todos) {
@@ -106,100 +106,8 @@ var TodoAPI = {
       return filteredTodos;
     }
   },
-
-  /* 
-  * Find todo with specific id */
-  getTodoById: function(_id) {
-    // Check if the _id parameter is valid
-    if (typeof _id === 'string') {
-      var stringTodos = localStorage.getItem('todos');
-      var _todos = [];
-      
-      // Handling errors
-      try {
-        var _todos = JSON.parse(stringTodos);
-      } catch (e) {
-        console.log(e);
-      }
-      
-      // Check the result
-      if ($.isArray(_todos)) {
-        // Check if the array is empty
-        if (_todos.length > 0) { 
-          /* 
-          * Find in array and get the first match result
-          * 
-          * This use Array.prototype.find()
-          * 
-          * The find() method returns the value of the first element in the array
-          * that satisfies the provided testing function. Otherwise undefined is returned.
-          * 
-          * More informations: 
-          *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find */
-          return _todos.find((_todo) => {
-            return (_todo.id === _id);
-          });
-          
-        } else {
-          // Return undefined if the array is empty
-          return undefined;
-        }
-        
-      } else {
-        return undefined;
-      }
-    // if the _id parameter is invalid
-    } else {
-      return undefined;
-    }
-  },
-    
-    
-  /* 
-  * Find todo with specific id and update its value */
-  updateTodoById: function(_id, _newTodo) {
-    // Check if the parameters is valid
-    if (typeof _id === 'string' && typeof _newTodo === 'object') {
-      var stringTodos = localStorage.getItem('todos');
-      var _todos = [];
-      
-      // Handling errors
-      try {
-        var _todos = JSON.parse(stringTodos);
-      } catch (e) {
-        console.log(e);
-      }
-      
-      // Check the result
-      if ($.isArray(_todos)) {
-        // Check if the array is empty
-        if (_todos.length > 0) { 
-          /* 
-          * Find in array and get the index of first match result
-          * 
-          * This use Array.prototype.findIndex()
-          * 
-          * The findIndex() method returns the index of the first element in the array 
-          * that satisfies the provided testing function. Otherwise -1 is returned.
-          * 
-          * More informations: 
-          * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex */
-          var needToUpdate = _todos.findIndex((_todo) => {
-            return (_todo.id === _id);
-          });
-          
-          // Update the element
-          _todos[needToUpdate] = _newTodo;
-          
-          // Set data back to localStorage
-          localStorage.setItem('todos', JSON.stringify(_todos));
-        } 
-      } 
-      return _todos;
-    }
-  },
 };
 
 /* 
 * Export the module */
-module.exports = TodoAPI;
+module.exports = TodoListAPI;

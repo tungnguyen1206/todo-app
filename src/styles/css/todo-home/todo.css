@@ -2,7 +2,7 @@
   align-items: center;
   cursor: pointer;
   display: flex;
-  padding: 1rem;
+  padding: 1mm;
   transition: background .3s ease;
 };
 

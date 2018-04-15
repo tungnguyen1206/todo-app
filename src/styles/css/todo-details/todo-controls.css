@@ -6,9 +6,11 @@
 
 .controls-form .complete-button {
   width: 20rem;
+  height: 3rem;
   margin-right: 3px;
 }
 
 .controls-form .back-button {
   width: 20rem;
+  height: 3rem;
 }
