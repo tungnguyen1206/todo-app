@@ -1,6 +1,7 @@
 /* 
-* Require react */
+* Require react, react-router */
 var React = require('react');
+var {hashHistory} = require('react-router');
 
 /* 
 * Require node-uuid library */
@@ -18,20 +19,39 @@ var TodoSearch = require('./TodoSearch');
 
 /* 
 * Require APIs */
-var TodoListAPI = require('../../api/TodoListAPI');
+var TodoAPI = require('../../api/TodoAPI');
+var AuthAPI = require('../../api/AuthAPI');
 
 /* 
 * Define Todo component */
 var TodoApp = React.createClass({
-  
+
   /* 
-  * This is data to pass into TodoList */
+  * Initial state */
   getInitialState: function() {
     return {
       showCompleted: false,
       searchText: '',
-      todos: TodoListAPI.getTodos(),
-    }
+      todos: [],
+    };
+  },
+
+  /* 
+  * Redirect if user is not logged in */
+  componentWillMount: function() {
+    // Avoid 'this'
+    var _TodoApp = this;
+
+    if (!AuthAPI.isLoggedIn()) {
+      hashHistory.push('/login');
+    } else {
+      TodoAPI.registerStorage(AuthAPI.getCurrentUserId());
+      _TodoApp.setState({
+        showCompleted: false,
+        searchText: '',
+        todos: TodoAPI.getTodos(),
+      });
+    }  
   },
 
   /* 
@@ -40,7 +60,7 @@ var TodoApp = React.createClass({
   * This method has some problems with tests: todos is not defined
   * How to fix it? */
   componentDidUpdate: function() {
-    TodoListAPI.setTodos(this.state.todos);
+    TodoAPI.setTodos(this.state.todos);
   },
 
   /* 
@@ -103,7 +123,7 @@ var TodoApp = React.createClass({
     var {todos, showCompleted, searchText} = _TodoApp.state;
 
     // Filtered list
-    var filteredTodos = TodoListAPI.filterTodos(todos, showCompleted, searchText);
+    var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
 
     return ( 
       <div>

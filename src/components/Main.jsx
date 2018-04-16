@@ -7,21 +7,22 @@ var React = require('react');
 var Nav = require('./Nav');
 
 /* 
-* Define Main component
-*
-* This use Stateless Functional Component 
-* For more information:
-*   https://code.tutsplus.com/tutorials/stateful-vs-stateless-functional-components-in-react--cms-29541 */
-var Main = (props) => {
-  return ( 
-    <div>
-      <Nav/>
-      {// Specify where to render the child component
-        props.children
-      }
-    </div>
-  );
-};
+* Define Main component */
+var Main = React.createClass({
+
+  /* 
+  * Render the component */
+  render: function() {
+    return ( 
+      <div>
+        <Nav/>
+        {// Specify where to render the child routing component
+          this.props.children
+        }
+      </div>
+    );
+  }
+});
 
 /* 
 * Export the component */

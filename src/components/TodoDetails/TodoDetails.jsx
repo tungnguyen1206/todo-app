@@ -1,6 +1,7 @@
 /* 
-* Require react */
+* Require react, react-router */
 var React = require('react');
+var {hashHistory} = require('react-router');
 
 /* 
 * Require moment */
@@ -13,32 +14,47 @@ var TodoControls = require('./TodoControls');
 
 /* 
 * Require APIs */
-var TodoElementAPI = require('../../api/TodoElementAPI');
+var TodoAPI = require('../../api/TodoAPI');
+var AuthAPI = require('../../api/AuthAPI');
 
 /* 
 * Define Todo component */
 var TodoDetails = React.createClass({
-  
+
   /* 
-  * Initial States */
+  * Initial state */
   getInitialState: function() {
+    return {
+      todo: {},
+    };
+  },
+
+  /* 
+  * Redirect if user is not logged in */
+  componentWillMount: function() {
     // Avoid 'this'
     var _TodoDetails = this;
 
-    // Get id from URL parameter
-    var _id = _TodoDetails.props.params.todoid;
-
-    return {
-      todo: TodoElementAPI.getTodoById(_id)
-    }
-  },
+    if (!AuthAPI.isLoggedIn()) {
+      hashHistory.push('/login');
+    } else {
+      // Register storage
+      TodoAPI.registerStorage(AuthAPI.getCurrentUserId());
+      // Get id from URL parameter
+      var _id = _TodoDetails.props.params.todoid;
+      // Init state
+      _TodoDetails.setState({
+        todo: TodoAPI.getTodoById(_id),
+      });
+    }  
+},
 
   /* 
   * Update localStorage with new data before the component unmount */
   componentWillUnmount: function() {
     var _newTodo = this.state.todo;
     var _id = _newTodo.id;
-    TodoElementAPI.updateTodoById(_id, _newTodo);
+    TodoAPI.updateTodoById(_id, _newTodo);
   },
 
   /* 

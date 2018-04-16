@@ -14,7 +14,6 @@ var TodoControls = React.createClass({
   /* 
   * Redirect to Home page */
   redirectToHome: function() {
-    debugger;
     /* 
     * More about history:
     *   https://reacttraining.com/react-router/core/api/history */
@@ -34,9 +33,13 @@ var TodoControls = React.createClass({
       <div className="controls-form">
         <button type="button"
                 className="btn btn-primary complete-button"
-                onClick={_TodoControls.props.onUpdateStatus}>{completed ? "Uncomplete" : "Complete"}</button>
+                onClick={_TodoControls.props.onUpdateStatus}>
+          {completed ? "Uncomplete" : "Complete"}
+        </button>
         <button className="btn btn-secondary back-button"
-                onClick={_TodoControls.redirectToHome}>Back</button>
+                onClick={_TodoControls.redirectToHome}>
+          Back
+        </button>
       </div>
     );
   }

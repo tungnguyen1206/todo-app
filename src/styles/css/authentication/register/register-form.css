@@ -1,0 +1,19 @@
+.form-row-register {
+  margin: 1rem -5px 1rem -5px;
+}
+
+.valid-input {
+  border: 1px solid #6bff27
+}
+
+.valid-input:focus {
+  box-shadow: 0px 0px 0px 3px #bbff9c;
+}
+
+.invalid-input {
+  border: 1px solid #ff7575
+}
+
+.invalid-input:focus {
+  box-shadow: 0px 0px 0px 3px #ffbbbb;
+}
