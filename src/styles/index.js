@@ -3,10 +3,14 @@
 // For multiple pages
 require('./css/page-title.css');
 
+// Nav bar
+require('./css/nav.css');
+
 // Todo home
 require('./css/todo-home/container.css');
 require('./css/todo-home/todo.css');
 require('./css/todo-home/todo-search.css');
+require('./css/todo-home/todo-list.css');
 require('./css/todo-home/add-todo.css');
 
 // Todo details

@@ -1,6 +1,7 @@
 /* 
-* Require react */
+* Require react and react-router */
 var React = require('react');
+var {Link, hashHistory} = require('react-router');
 
 /* 
 * Require components */
@@ -13,6 +14,14 @@ var TodoList = React.createClass({
   //  PropTypes 
   propTypes: {
     todoList: React.PropTypes.array,
+  },
+
+  /* 
+  * Redirect to details page when user click on arrow container */
+  redirectToTodoDetailsId: function(_id) {
+    return (() => {
+      hashHistory.push(`/todos/${_id}`);
+    });
   },
 
   /* Render component */
@@ -43,7 +52,15 @@ var TodoList = React.createClass({
             /* 
             * Spread syntax: {...todo} -> id={2} text={"Some text"}
             *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
-            <Todo key={todo.id} onToggle={_TodoList.props.onToggle} {...todo}/> 
+            <div className="todo-container">
+              <div className="todo-text-container">
+                <Todo key={todo.id} onToggle={_TodoList.props.onToggle} {...todo}/> 
+              </div>
+              <div  className="todo-detail-arrow-container"
+                    onClick={_TodoList.redirectToTodoDetailsId(todo.id)}>
+                <p><span className="oi oi-chevron-right detail-arrow"></span></p>
+              </div>
+            </div>
           );
           
         });

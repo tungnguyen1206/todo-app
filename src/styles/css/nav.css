@@ -1,0 +1,15 @@
+.login-icon {
+  margin: 0px 3px 0px 3px;
+}
+
+.logout-icon {
+  margin: 0px 3px 0px 3px;
+}
+
+.nav-item {
+  transition: background .15s ease-in-out;
+}
+
+.nav-item:hover {
+  background: #eeeeee;
+}

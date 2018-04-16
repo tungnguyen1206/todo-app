@@ -11,7 +11,7 @@ var ReactDOM = require('react-dom');
 var {Route, Router, IndexRoute, hashHistory} = require('react-router');
 
 /* 
-* Load bootstrap && jQuery */
+* Load bootstrap && jQuery && open-iconic */
 require('./libs/index');
 
 /* 

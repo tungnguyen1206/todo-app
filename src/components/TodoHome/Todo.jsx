@@ -66,7 +66,7 @@ var Todo = React.createClass({
           <input type="checkbox" checked={completed}/>
         </div>
         <div>
-          <Link to={`todos/${id}`}>{text}</Link>
+          <p>{text}</p>
           <p className="todo-subtext">{renderTimeStamp()}</p>
         </div>
       </div>

@@ -1,0 +1,23 @@
+.todo-container {
+  display: flex;
+}
+
+.todo-text-container {
+  width: 40rem;
+}
+
+.todo-detail-arrow-container {
+  cursor: pointer;
+  transition: background .15s ease;
+}
+
+.todo-detail-arrow-container:hover {
+  background: #f0f0f0;  
+}
+
+.detail-arrow {
+  color: #007bff;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  margin-right: 1rem;
+}

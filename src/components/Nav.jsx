@@ -34,10 +34,15 @@ var Nav = React.createClass({
         return (
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link to="/todos" className="nav-link">{AuthAPI.getCurrentUserName()}</Link>
+              <Link to="/todos" className="nav-link">
+                {AuthAPI.getCurrentUserName()}
+              </Link>
             </li>
             <li className="nav-item">
-              <Link to="/login" className="nav-link" onClick={_Nav.onLogoutClick}>Logout</Link>
+              <Link to="/login" className="nav-link" onClick={_Nav.onLogoutClick}>
+                <span className="oi oi-account-logout logout-icon"></span>
+                Logout
+              </Link>
             </li>
           </ul>
         );
@@ -45,7 +50,10 @@ var Nav = React.createClass({
         return (
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link to="/login" className="nav-link">Login</Link>
+              <Link to="/login" className="nav-link">
+                <span className="oi oi-account-login login-icon"></span>
+                Login
+              </Link>
             </li>
             <li className="nav-item">
               <Link to="/register" className="nav-link">Register</Link>
