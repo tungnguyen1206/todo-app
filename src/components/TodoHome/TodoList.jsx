@@ -17,10 +17,19 @@ var TodoList = React.createClass({
   },
 
   /* 
-  * Redirect to details page when user click on arrow container */
+  * Redirect to details page when user click on details arrow container */
   redirectToTodoDetailsId: function(_id) {
     return (() => {
       hashHistory.push(`/todos/${_id}`);
+    });
+  },
+
+  /* 
+  * Delete todo when user click on delete container */
+  onDeleteClick: function(_id) {
+    return (() => {
+      // Pass this function to parent
+      this.props.onDeleteClick(_id);
     });
   },
 
@@ -53,13 +62,24 @@ var TodoList = React.createClass({
             * Spread syntax: {...todo} -> id={2} text={"Some text"}
             *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
             <div className="todo-container">
+
               <div className="todo-text-container">
                 <Todo key={todo.id} onToggle={_TodoList.props.onToggle} {...todo}/> 
               </div>
-              <div  className="todo-detail-arrow-container"
-                    onClick={_TodoList.redirectToTodoDetailsId(todo.id)}>
-                <p><span className="oi oi-chevron-right detail-arrow"></span></p>
+
+              <div>
+                <div  className="todo-detail-arrow-container"
+                      title="Show details"
+                      onClick={_TodoList.redirectToTodoDetailsId(todo.id)}>
+                  <p className="for-icon"><span className="oi oi-chevron-right todo-detail-arrow"></span></p>
+                </div>
+                <div  className="todo-delete-container"
+                      title="Delete"
+                      onClick={_TodoList.onDeleteClick(todo.id)}>
+                  <p className="for-icon"><span className="oi oi-trash todo-delete"></span></p>
+                </div>
               </div>
+
             </div>
           );
           

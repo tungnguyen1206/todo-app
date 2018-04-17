@@ -98,6 +98,20 @@ var TodoApp = React.createClass({
   },
 
   /* 
+  * This function handle delete todo by it's id */
+  handlingDeleteTodo: function(_id) {
+    var _TodoApp = this;
+    // Check if delete is success
+    if (TodoAPI.deleteTodoById(_id)) {
+      // Set the new state
+      _TodoApp.setState({todos: TodoAPI.getTodos()});
+      console.log('Delete success');
+    } else {
+      console.log('Delete failed');
+    }
+  },
+
+  /* 
   * Handle toggle todos */
   handlingToggle: function(_id) {
     // Avoid 'this'
@@ -110,8 +124,8 @@ var TodoApp = React.createClass({
       }
       return todo;
     });
-
-    _TodoApp.setState(updatedTodos);
+    // Set the new state
+    _TodoApp.setState({todos: updatedTodos});
   },
 
   /* Render the component */
@@ -131,7 +145,9 @@ var TodoApp = React.createClass({
         <div className="row">
           <div className="container col-xs-10 col-md-6 col-lg-4 col-xs-offset-1 col-md-offset-3 col-lg-offset-4">
             <TodoSearch onSearch={_TodoApp.handlingSearchTodo}/>
-            <TodoList todoList={filteredTodos} onToggle={_TodoApp.handlingToggle}/>
+            <TodoList todoList={filteredTodos}
+                      onToggle={_TodoApp.handlingToggle} 
+                      onDeleteClick={_TodoApp.handlingDeleteTodo}/>
             <AddTodo onNewTodo={_TodoApp.handlingNewTodo}/>
           </div>
         </div>

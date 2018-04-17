@@ -2,6 +2,11 @@
   display: flex;
 }
 
+p.for-icon {
+  margin-bottom: 0px;
+  font-size: 13px;
+}
+
 .todo-text-container {
   width: 40rem;
 }
@@ -15,9 +20,21 @@
   background: #f0f0f0;  
 }
 
-.detail-arrow {
+.todo-detail-arrow {
   color: #007bff;
-  padding-top: 1rem;
-  padding-left: 1rem;
-  margin-right: 1rem;
+  padding: 19px .5rem 19px .5rem;
+}
+
+.todo-delete-container {
+  cursor: pointer;
+  transition: background .15s ease;
+}
+
+.todo-delete-container:hover {
+  background: #f0f0f0;  
+}
+
+.todo-delete {
+  color: #007bff;
+  padding: 19px .5rem 19px .5rem;
 }

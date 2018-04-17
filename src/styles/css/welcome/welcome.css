@@ -1,0 +1,39 @@
+.welcome-title {
+  color: #007bff;
+  font-size: 45px;
+  margin-top: 10rem;
+  text-align: center;
+}
+
+
+.intro-line {
+  font-size: 18px;
+  margin-top: 2rem;
+  margin-bottom: 6rem;
+  text-align: center;
+}
+
+.guide-container {
+  margin-top: 3rem;
+}
+
+.guide-line {
+  font-size: 18px;
+  text-align: center;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.welcome-button {
+  /* To use transition for width, you must set the fixed width */
+  width: 100px;
+  border-radius: 3rem;
+  transition: width .1s ease-in-out;
+}
+
+.welcome-button:hover {
+  width: 140px;
+}

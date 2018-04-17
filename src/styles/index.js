@@ -6,6 +6,9 @@ require('./css/page-title.css');
 // Nav bar
 require('./css/nav.css');
 
+// Welcome page
+require('./css/welcome/welcome.css');
+
 // Todo home
 require('./css/todo-home/container.css');
 require('./css/todo-home/todo.css');

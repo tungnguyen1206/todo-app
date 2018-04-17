@@ -42,6 +42,7 @@ var TodoAPI = new (function() {
           todos = [];
           return false;
         }
+      // Todos has loaded, return true
       } else {
         return true;
       }
@@ -153,10 +154,18 @@ var TodoAPI = new (function() {
           // Always return true if have no searchText
           return true;
         } else {
-          // New regular expression, with 'i' modifier
-          var regExp = new RegExp(_searchText, 'i');
-          // Return test result
-          return regExp.test(todo.text);
+          // This variable contain regular expression
+          var regExp;
+          try {
+            // New regular expression, with 'i' modifier - case insensitive
+            regExp = new RegExp(_searchText, 'i');
+            // Return test result
+            return regExp.test(todo.text);
+          } catch (error) {
+            // Catching error when user typed wrong regular expression
+            console.log(error);
+            return true;
+          }
         }
       });
 
@@ -263,6 +272,63 @@ var TodoAPI = new (function() {
       }
 
       
+    }
+  };
+
+  /* 
+  * Delete todo by it's id */
+  _TodoAPI.deleteTodoById = function(_id) {
+    // Check if the _id parameter is valid
+    if (typeof _id === 'string') {
+
+      // Get list of todos: an array
+      if (loadTodos()) {
+        // Check if the array is empty
+        if (todos.length > 0) { 
+          /* 
+          * Find in array and get the index of first match result
+          * 
+          * This use Array.prototype.findIndex()
+          * 
+          * The findIndex() method returns the index of the first element in the array 
+          * that satisfies the provided testing function. Otherwise -1 is returned.
+          * 
+          * More informations: 
+          *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex */
+          var indexOfDelete = todos.findIndex((_todo) => {
+            return (_todo.id === _id);
+          });
+
+          /* 
+          * Remove element form array using splice() method
+          * 
+          * The splice() method changes the contents of an array 
+          * by removing existing elements and/or adding new elements. 
+          * 
+          * More informations: 
+          *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice */
+          if (indexOfDelete > -1) {
+            // From indexOfDelete, delete one element 
+            todos.splice(indexOfDelete, 1);
+            // Update to localStorage
+            saveTodos();
+            return true;
+          // Element not found
+          } else {
+            return false;
+          }
+          
+        } else {
+          // Return false if the array is empty
+          return false;
+        }        
+      } else {
+        return false;
+      }
+
+    // if the _id parameter is invalid
+    } else {
+      return false;
     }
   };
 

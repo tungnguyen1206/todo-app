@@ -127,7 +127,7 @@ var RegisterForm = React.createClass({
               <input  type="password" 
                       id="pass-word"
                       className="form-control password-input"
-                      onKeyUp={_RegisterForm.changeConfirmState}
+                      onChange={_RegisterForm.changeConfirmState}
                       ref="passwordInput"/>
             </div>
           </div>
@@ -140,7 +140,7 @@ var RegisterForm = React.createClass({
               <input  type="password" 
                       id="confirm-pass-word"
                       className={classForConfirmPassword()}
-                      onKeyUp={_RegisterForm.changeConfirmState}
+                      onChange={_RegisterForm.changeConfirmState}
                       ref="confirmPasswordInput"/>
             </div>
           </div>

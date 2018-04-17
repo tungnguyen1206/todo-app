@@ -21,6 +21,7 @@ require('./styles/index')
 /* 
 * Require components */
 var Main = require('./components/Main');
+var Welcome = require('./components/Welcome/Welcome');
 var TodoApp = require('./components/TodoHome/TodoApp');
 var TodoDetails = require('./components/TodoDetails/TodoDetails');
 var Login = require('./components/Authentication/Login/Login');
@@ -40,6 +41,7 @@ ReactDOM.render(
       <Route path="todos/:todoid" component={TodoDetails}/> 
       <Route path="login" component={Login}/> 
       <Route path="register" component={Register}/>
+      <IndexRoute component={Welcome}/>
     </Route>
   </Router>,
   document.getElementById('app')

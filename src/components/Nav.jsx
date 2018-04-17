@@ -29,6 +29,8 @@ var Nav = React.createClass({
     // Avoid 'this'
     var _Nav = this;
 
+    /* 
+    * Render content for navbar right-side menu, base on login state of user */
     var renderRightMenu = function() {
       if (AuthAPI.isLoggedIn()) {
         return (
@@ -64,11 +66,21 @@ var Nav = React.createClass({
     };
 
     /* 
+    * Render content for navbar-brand base on login state of user */
+    var renderNavbarBrand = function() {
+      if (AuthAPI.isLoggedIn()) {
+        return (<Link to="/todos" className="navbar-brand">Todo App</Link>);
+      } else {
+        return (<Link to="/" className="navbar-brand">Todo App</Link>);
+      }
+    };
+
+    /* 
     * Render the component */
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
 
-        <Link to="/" className="navbar-brand">Todo App</Link>
+        {renderNavbarBrand()}
 
         <button className="navbar-toggler" 
                 type="button" 
@@ -84,7 +96,7 @@ var Nav = React.createClass({
 
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to="/todos" className="nav-link">Home</Link>
+              <Link to="/todos" className="nav-link">Todos</Link>
             </li>
           </ul>
 
