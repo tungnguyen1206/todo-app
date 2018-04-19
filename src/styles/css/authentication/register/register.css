@@ -1,0 +1,11 @@
+.alert-register-error {
+  margin: 1rem .5rem 0rem .5rem;
+}
+
+.dissmis-register-alert-button {
+  font-size: 12px;
+}
+
+.alert-dismissible .close {
+  padding: .5rem 1.25rem;
+}

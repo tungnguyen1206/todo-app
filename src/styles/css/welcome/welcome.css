@@ -1,7 +1,7 @@
 .welcome-title {
   color: #007bff;
   font-size: 45px;
-  margin-top: 10rem;
+  margin-top: 11rem;
   text-align: center;
 }
 
@@ -9,7 +9,7 @@
 .intro-line {
   font-size: 18px;
   margin-top: 2rem;
-  margin-bottom: 6rem;
+  margin-bottom: 3rem;
   text-align: center;
 }
 
@@ -30,6 +30,7 @@
 .welcome-button {
   /* To use transition for width, you must set the fixed width */
   width: 100px;
+  height: 45px;
   border-radius: 3rem;
   transition: width .1s ease-in-out;
 }

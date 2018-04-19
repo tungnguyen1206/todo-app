@@ -42,7 +42,7 @@ var Nav = React.createClass({
             </li>
             <li className="nav-item">
               <Link to="/login" className="nav-link" onClick={_Nav.onLogoutClick}>
-                <span className="oi oi-account-logout logout-icon"></span>
+                <span className="oi oi-account-logout logout-icon" aria-hidden="true"></span>
                 Logout
               </Link>
             </li>
@@ -53,7 +53,7 @@ var Nav = React.createClass({
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
               <Link to="/login" className="nav-link">
-                <span className="oi oi-account-login login-icon"></span>
+                <span className="oi oi-account-login login-icon" aria-hidden="true"></span>
                 Login
               </Link>
             </li>

@@ -37,7 +37,7 @@ var RegisterForm = React.createClass({
 
       if (user.password === confirmPassword) {
         // Clean username
-        this.refs.usernameInput.value = '';
+        // this.refs.usernameInput.value = '';
         // Reset state
         _RegisterForm.setState({
           confirmEmpty: true,
