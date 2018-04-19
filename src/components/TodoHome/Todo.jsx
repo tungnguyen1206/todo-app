@@ -1,23 +1,28 @@
 /* 
 * Require react */
-var React = require('react');
+import React from 'react';
 
 /* 
 * Require Link in react-router */
-var {Link} = require('react-router');
+// import {Link} from 'react-router';
 
 /* 
 * Require moment */
-var moment = require('moment');
+import moment from 'moment';
 
 /* 
 * Define Todo component */
-var Todo = React.createClass({
+class Todo extends React.Component {
 
-  //  PropTypes 
-  propTypes: {
-    onToggle: React.PropTypes.func,
-  },
+  /* 
+  * Constructor */
+  constructor(props) {
+    super(props);
+
+    // Bind handle event methods to this component
+    this.onToggle = this.onToggle.bind(this);
+
+  };
 
   /* 
   * Handle toggle todo 
@@ -26,54 +31,53 @@ var Todo = React.createClass({
   * the reference of function, not value of function
   * For more informations: 
   *   https://reactjs.org/docs/faq-functions.html */
-  onToggle: function(_id) {
-    // Avoid 'this'
-    var _Todo = this;
+  onToggle(_id) {
     return () => {
-      _Todo.props.onToggle(_id);      
+      this.props.onToggle(_id);      
     };
-  },
+  };
+
+  /* 
+  * Render timeStamp */
+  renderTimeStamp() {
+    var {completed, createdAt, completedAt} = this.props;
+
+    // Uncompleted
+    var timeStamp = createdAt;
+    var message = "Created ";
+
+    // Completed
+    if (completed) {
+      timeStamp = completedAt;
+      message = "Completed ";
+    }
+
+    return message + moment.unix(timeStamp).format('MMMM Do, YYYY @ hh:mm A');
+  };
 
   /* Render the component */
-  render: function() {
-
-    var _Todo = this;
-    
+  render() {
+   
     // Get values
-    var {id, text, completed, createdAt, completedAt} = _Todo.props;
+    var {id, text, completed} = this.props;
 
     // Conditional className for todo
     var todoClassName = completed ? 'todo todo-completed' : 'todo';
 
-    // Render timeStamp
-    var renderTimeStamp = () => {
-      // Uncompleted
-      var timeStamp = createdAt;
-      var message = "Created ";
-
-      // Completed
-      if (completed) {
-        timeStamp = completedAt;
-        message = "Completed ";
-      }
-
-      return message + moment.unix(timeStamp).format('MMMM Do, YYYY @ hh:mm A');
-    };
-
     return (
-      <div className={todoClassName} onClick={_Todo.onToggle(id)}>
+      <div className={todoClassName} onClick={this.onToggle(id)}>
         <div>
           <input type="checkbox" checked={completed}/>
         </div>
         <div>
           <p>{text}</p>
-          <p className="todo-subtext">{renderTimeStamp()}</p>
+          <p className="todo-subtext">{this.renderTimeStamp()}</p>
         </div>
       </div>
     );
-  }
-});
+  };
+};
 
 /* 
 * Export the component */
-module.exports = Todo;
+export default Todo;

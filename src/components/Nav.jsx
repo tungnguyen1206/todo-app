@@ -1,95 +1,113 @@
 /* 
 * Require react */
-var React = require('react');
+import React from 'react';
 
 /* 
 * Require react-router link */
-var {Link, hashHistory} = require('react-router');
+import {Link} from 'react-router';
 
 /* 
 * Require APIs */
-var AuthAPI = require('../api/AuthAPI');
-var TodoAPI = require('../api/TodoAPI');
+import AuthAPI from '../api/AuthAPI';
+import TodoAPI from '../api/TodoAPI';
 
 /* 
 * Define component */
-var Nav = React.createClass({
+class Nav extends React.Component {
+
+  /* 
+  * Constructor */
+  constructor(props) {
+    super(props);
+
+    // Bind handle event methods to this component
+    this.onLogoutClick = this.onLogoutClick.bind(this);
+
+    // Bind optional render methods
+    this.renderRightMenu = this.renderRightMenu.bind(this);
+  }
 
   /* 
   * Handle when user click Logout */
-  onLogoutClick: function() {
+  onLogoutClick() {
     // Logout for user
     AuthAPI.logout();
     TodoAPI.logoutStorage();
-  },
+  };
+
+  /* 
+  * Render content for navbar right-side menu, base on login state of user */
+  renderRightMenu() {
+    if (AuthAPI.isLoggedIn()) {
+      return (
+        <ul className="navbar-nav ml-auto">
+
+          <li className="nav-item">
+            <Link to="/todos" className="nav-link">
+              {AuthAPI.getCurrentUserName()}
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/login" className="nav-link" onClick={this.onLogoutClick}>
+              <span className="oi oi-account-logout logout-icon" aria-hidden="true" />
+              Logout
+            </Link>
+          </li>
+
+        </ul>
+      );
+
+    } else {
+      return (
+        <ul className="navbar-nav ml-auto">
+
+          <li className="nav-item">
+            <Link to="/login" className="nav-link">
+              <span className="oi oi-account-login login-icon" aria-hidden="true" />
+              Login
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/register" className="nav-link">Register</Link>
+          </li>
+
+        </ul>
+      );
+    }
+  };
+
+  /* 
+  * Render content for navbar-brand base on login state of user */
+  renderNavbarBrand() {
+    if (AuthAPI.isLoggedIn()) {
+      return (<Link to="/todos" className="navbar-brand">Todo App</Link>);
+    } else {
+      return (<Link to="/" className="navbar-brand">Todo App</Link>);
+    }
+  };
   
   /* 
   * Render the components */
-  render: function() {
-    // Avoid 'this'
-    var _Nav = this;
-
-    /* 
-    * Render content for navbar right-side menu, base on login state of user */
-    var renderRightMenu = function() {
-      if (AuthAPI.isLoggedIn()) {
-        return (
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/todos" className="nav-link">
-                {AuthAPI.getCurrentUserName()}
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/login" className="nav-link" onClick={_Nav.onLogoutClick}>
-                <span className="oi oi-account-logout logout-icon" aria-hidden="true"></span>
-                Logout
-              </Link>
-            </li>
-          </ul>
-        );
-      } else {
-        return (
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/login" className="nav-link">
-                <span className="oi oi-account-login login-icon" aria-hidden="true"></span>
-                Login
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/register" className="nav-link">Register</Link>
-            </li>
-          </ul>
-        );
-      }
-    };
-
-    /* 
-    * Render content for navbar-brand base on login state of user */
-    var renderNavbarBrand = function() {
-      if (AuthAPI.isLoggedIn()) {
-        return (<Link to="/todos" className="navbar-brand">Todo App</Link>);
-      } else {
-        return (<Link to="/" className="navbar-brand">Todo App</Link>);
-      }
-    };
-
+  render() {
     /* 
     * Render the component */
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
 
-        {renderNavbarBrand()}
+        {this.renderNavbarBrand()}
 
-        <button className="navbar-toggler" 
-                type="button" 
-                data-toggle="collapse" 
-                data-target="#navbarSupportedContent" 
-                aria-controls="navbarSupportedContent" 
-                aria-expanded="false" 
-                aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
+        <button 
+          className="navbar-toggler" 
+          type="button" 
+          data-toggle="collapse" 
+          data-target="#navbarSupportedContent" 
+          aria-controls="navbarSupportedContent" 
+          aria-expanded="false" 
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" />
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -100,15 +118,16 @@ var Nav = React.createClass({
             </li>
           </ul>
 
-          {renderRightMenu()}
+          {this.renderRightMenu()}
 
         </div>
           
       </nav>
     ); 
-  }
-});
+  };
+
+};
 
 /* 
 * Export the component */
-module.exports = Nav;
+export default Nav;

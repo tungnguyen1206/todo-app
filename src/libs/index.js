@@ -1,11 +1,11 @@
 /* 
 * Import jQuery */
-require('./jquery');
+import './jquery';
 
 /* 
 * Import bootstrap */
-require('./bootstrap');
+import './bootstrap';
 
 /* 
 * Import open-iconic-bootstrap */
-require('./open-iconic-bootstrap');
+import './open-iconic-bootstrap';

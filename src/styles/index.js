@@ -1,27 +1,27 @@
 /* 
 * Require all css custom files */
 // For multiple pages
-require('./css/page-title.css');
+import './css/page-title.css';
 
 // Nav bar
-require('./css/nav.css');
+import './css/nav.css';
 
 // Welcome page
-require('./css/welcome/welcome.css');
+import './css/welcome/welcome.css';
 
 // Todo home
-require('./css/todo-home/container.css');
-require('./css/todo-home/todo.css');
-require('./css/todo-home/todo-search.css');
-require('./css/todo-home/todo-list.css');
-require('./css/todo-home/add-todo.css');
+import './css/todo-home/container.css';
+import './css/todo-home/todo.css';
+import './css/todo-home/todo-search.css';
+import './css/todo-home/todo-list.css';
+import './css/todo-home/add-todo.css';
 
 // Todo details
-require('./css/todo-details/todo-info.css');
-require('./css/todo-details/todo-controls.css');
+import './css/todo-details/todo-info.css';
+import './css/todo-details/todo-controls.css';
 
 // authentication
-require('./css/authentication/login/login.css');
-require('./css/authentication/login/login-form.css');
-require('./css/authentication/register/register.css');
-require('./css/authentication/register/register-form.css');
+import './css/authentication/login/login.css';
+import './css/authentication/login/login-form.css';
+import './css/authentication/register/register.css';
+import './css/authentication/register/register-form.css';

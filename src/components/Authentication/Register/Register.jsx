@@ -1,39 +1,48 @@
 /* 
 * Require react, react-router hashHistory */
-var React = require('react');
-var {hashHistory} = require('react-router');
+import React from 'react';
+import {hashHistory} from 'react-router';
 
 /* 
 * Require other components */
-var RegisterForm = require('./RegisterForm');
+import RegisterForm from './RegisterForm';
 
 /* 
 * Require APIs */
-var AuthAPI = require('../../../api/AuthAPI');
+import AuthAPI from '../../../api/AuthAPI';
 
 /*
 * Define component */
-var Register = React.createClass({
+class Register extends React.Component {
 
   /* 
-  * Get initial state */
-  getInitialState: function() {
-    return {
-      registerError: false
+  * Constructor */
+  constructor(props) {
+    super(props);
+
+    // Bind handle event methods to this component
+    this.registerFor = this.registerFor.bind(this);
+
+    // Bind optional render methods
+    this.renderErrorAlert = this.renderErrorAlert.bind(this);
+
+    // Initial state
+    this.state = {
+      registerError: false      
     };
-  },
+  };
   
   /* 
   * Redirect if user is logged in */
-  componentWillMount: function() {
+  componentWillMount() {
     if(AuthAPI.isLoggedIn()) {
       hashHistory.push('/todos');
     }
-  },
+  };
 
   /* 
   * Handle when user login */
-  registerFor: function(_user) {
+  registerFor(_user) {
 
     if (AuthAPI.register(_user)) {
       // Auto login for registered user
@@ -49,33 +58,33 @@ var Register = React.createClass({
       console.log('Register failed');
     }
 
-  },
+  };
+
+  /* 
+  * Render error alert */
+  renderErrorAlert() {
+    if (this.state.registerError) {
+      return (
+        <div className="alert alert-danger alert-dismissible fade show alert-register-error" role="alert">
+          Register failed! This username was used.
+          <button 
+            type="button"
+            className="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span className="oi oi-x dissmis-register-alert-button" aria-hidden="true" />
+          </button> 
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
 
   /* 
   * Render component */
-  render: function() {
-    // Avoid 'this'
-    var _Register = this;
-
-    // Render error alert
-    var renderErrorAlert = function() {
-      if (_Register.state.registerError) {
-        return (
-          <div className="alert alert-danger alert-dismissible fade show alert-register-error" role="alert">
-            Register failed! This username was used.
-            <button type="button"
-                    className="close"
-                    data-dismiss="alert"
-                    aria-label="Close">
-              <span className="oi oi-x dissmis-register-alert-button" aria-hidden="true"></span>
-            </button> 
-          </div>
-        );
-      } else {
-        // return ();
-      }
-    };
-
+  render() {
     return (
       <div>
 
@@ -86,21 +95,21 @@ var Register = React.createClass({
            
             <div className="row">
               <div className="col-10 offset-1">
-                {renderErrorAlert()}
+                {this.renderErrorAlert()}
               </div>
             </div>  
             
-            <RegisterForm onRegister={_Register.registerFor}/>
+            <RegisterForm onRegister={this.registerFor} />
 
           </div>
         </div>
 
       </div>
     );
-  }
-});
+  };
+};
 
 
 /* 
 * Export the component */
-module.exports = Register;
+export default Register;

@@ -1,31 +1,30 @@
 /* 
 * Require react */
-var React = require('react');
+import React from 'react';
 
 /* 
 * Require moment */
-var moment = require('moment');
+import moment from 'moment';
 
 /* 
 * Defining component */
-var TodoInfo = React.createClass({
+class TodoInfo extends React.Component {
 
-  
-  render: function() {
-    // Avoid 'this'
-    var _TodoInfo = this;
+  formatTimeStamp(_timeStamp) {
+    // Check if the _timeStamp is a number
+    if (typeof _timeStamp === 'number') {
+      return moment.unix(_timeStamp).format('hh:mm A - MMMM Do, YYYY');
+    } else {
+      return undefined;
+    }
+  };
+
+  /* 
+  * Render the component */
+  render() {
 
     // Get value from props
-    var {id, text, completed, createdAt, completedAt} = _TodoInfo.props.todo;
-
-    var formatTimeStamp = function(_timeStamp) {
-      // Check if the _timeStamp is a number
-      if (typeof _timeStamp === 'number') {
-        return moment.unix(_timeStamp).format('hh:mm A - MMMM Do, YYYY');
-      } else {
-        return undefined;
-      }
-    };
+    var {id, text, completed, createdAt, completedAt} = this.props.todo;
 
     return (
       <div className="info-list">
@@ -53,7 +52,7 @@ var TodoInfo = React.createClass({
             <p>Created at:</p>
           </div>
           <div className="col-xs-7 col-md-7">
-            <p>{formatTimeStamp(createdAt)}</p>
+            <p>{this.formatTimeStamp(createdAt)}</p>
           </div>
         </div>
 
@@ -62,15 +61,21 @@ var TodoInfo = React.createClass({
             <p>Status:</p>
           </div>
           <div className="col-xs-7 col-md-7">
-            <p>{completed ? `Completed at ${formatTimeStamp(completedAt)}` : 'Uncompleted'}</p>
+            <p>
+              {
+                completed 
+                ? `Completed at ${this.formatTimeStamp(completedAt)}` 
+                : 'Uncompleted'
+              }
+            </p>
           </div>
         </div>
 
       </div>
     );
-  }
-});
+  };
+};
 
 /* 
 * Export the component */
-module.exports = TodoInfo;
+export default TodoInfo;

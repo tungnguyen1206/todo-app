@@ -1,31 +1,31 @@
 /* 
 * Require React and react-dom */
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 /* 
 * Require react router
 * This use Destructuring assignment
 * Reference:
 *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment */
-var {Route, Router, IndexRoute, hashHistory} = require('react-router');
+import {Route, Router, IndexRoute, hashHistory} from 'react-router';
 
 /* 
 * Load bootstrap && jQuery && open-iconic */
-require('./libs/index');
+import './libs/index';
 
 /* 
 * Load our custom style */
-require('./styles/index')
+import './styles/index';
 
 /* 
 * Require components */
-var Main = require('./components/Main');
-var Welcome = require('./components/Welcome/Welcome');
-var TodoApp = require('./components/TodoHome/TodoApp');
-var TodoDetails = require('./components/TodoDetails/TodoDetails');
-var Login = require('./components/Authentication/Login/Login');
-var Register = require('./components/Authentication/Register/Register');
+import Main from'./components/Main';
+import Welcome from'./components/Welcome/Welcome';
+import TodoApp from'./components/TodoHome/TodoApp';
+import TodoDetails from'./components/TodoDetails/TodoDetails';
+import Login from'./components/Authentication/Login/Login';
+import Register from'./components/Authentication/Register/Register';
 
 /* Render component to DOM emement */
 ReactDOM.render(

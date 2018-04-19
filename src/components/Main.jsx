@@ -1,42 +1,44 @@
 /* 
 * Require react & react-router */
-var React = require('react');
-var {hashHistory} = require('react-router');
+import React from 'react';
+import {hashHistory} from 'react-router';
 
 /* 
 * Require components */
-var Nav = require('./Nav');
+import Nav from './Nav';
 
 /* 
 * Require APIs */
-var AuthAPI = require('../api/AuthAPI');
+import AuthAPI from '../api/AuthAPI';
 
 /* 
 * Define Main component */
-var Main = React.createClass({
+class Main extends React.Component {
+
   /* 
   * Redirect when user was logged in */
-  componentWillMount: function() {
+  componentWillMount() {
     // Checking and redirecting
     if (AuthAPI.isLoggedIn()) {
       hashHistory.push('/todos');
     }
-  },
+  };
 
   /* 
   * Render the component */
-  render: function() {
+  render() {
     return ( 
       <div>
-        <Nav/>
+        <Nav />
         {// Specify where to render the child routing component
           this.props.children
         }
       </div>
     );
-  }
-});
+  };
+
+};
 
 /* 
 * Export the component */
-module.exports = Main;
+export default Main;

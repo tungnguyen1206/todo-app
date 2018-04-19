@@ -1,49 +1,64 @@
 /* 
 * Require react */
-var React = require('react');
+import React from 'react';
 
 /* 
 * AddTodo definition */
-var AddTodo = React.createClass({
-  // Handling form submit
-  onFormSubmit: function(e) {
+class AddTodo extends React.Component {
+
+  /* 
+  * Constructor */
+  constructor(props) {
+    super(props);
+
+    // Bind handle event methods to this component
+    this.onFormSubmit = this.onFormSubmit.bind(this);
+
+  };
+
+  /* 
+  * Handle form submit */
+  onFormSubmit(e) {
     e.preventDefault();
 
-    // Avoid 'this'
-    var _AddTodo = this;
-
     // Get value from input
-    var texts = _AddTodo.refs.todotexts.value;
+    var texts = this.todotexts.value;
 
     // Checking input
     if (typeof texts === 'string' && texts.length > 0) {
       // Clean input box
-      _AddTodo.refs.todotexts.value = '';
+      this.todotexts.value = '';
       // Push data up
-      _AddTodo.props.onNewTodo(texts);
+      this.props.onNewTodo(texts);
     }    
-  },
+  };
 
-  render: function() {
-    // Avoid 'this'
-    var _AddTodo = this;    
-
+  /* 
+  * Render the component */
+  render() {   
     return(
       <div className="container-footer">
-        <form ref="form" className="add-todo" onSubmit={_AddTodo.onFormSubmit}>
-          <input  ref="todotexts" 
-                  type="text" 
-                  className="add-todo-text form-control" 
-                  placeholder="Enter your note"/>
-          <button type="submit" 
-                  className="add-todo-button btn btn-block btn-primary">Add Todo</button>
+        <form ref="form" className="add-todo" onSubmit={this.onFormSubmit}>
+          <input  
+            ref={(thisRef) => {this.todotexts = thisRef;}}
+            type="text" 
+            className="add-todo-text form-control" 
+            placeholder="Enter your note"
+          />
+
+          <button 
+            type="submit" 
+            className="add-todo-button btn btn-block btn-primary"
+          >
+            Add Todo
+          </button>
         </form>
       </div>
     );
-  }
-});
+  };
+};
 
 
 /* 
 * Export the component */
-module.exports = AddTodo;
+export default AddTodo;

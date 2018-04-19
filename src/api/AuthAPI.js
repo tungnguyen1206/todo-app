@@ -1,29 +1,42 @@
 /* 
 * Require jQuery */
-var $ = require('jquery');
+import $ from 'jquery';
 
 /* 
 * Require crypto */
-var crypto = require('crypto');
+import crypto from 'crypto';
 
 /* 
 * Require node-uuid */
-var uuid = require('node-uuid');
+import uuid from 'node-uuid';
 
 /* 
 * This API is used for app authentication
 * Including: login, register, logout, check login state */
-var AuthAPI = new (function() {
+let AuthAPI = new (class {
+  /* 
+  * Class constructor */
+  constructor() {
+    // All user data
+    this.users = [];
 
-  // Avoid 'this'
-  var _AuthAPI = this;
-
-  // All user data
-  var users = [];
+    // Bind for all methods
+    this.loadData = this.loadData.bind(this);
+    this.saveData = this.saveData.bind(this);
+    this.isExist = this.isExist.bind(this);
+    this.findUser = this.findUser.bind(this);
+    this.findUserById = this.findUserById.bind(this);
+    this.isLoggedIn = this.isLoggedIn.bind(this);
+    this.getCurrentUserId = this.getCurrentUserId.bind(this);
+    this.getCurrentUserName = this.getCurrentUserName.bind(this);
+    this.logout = this.logout.bind(this);
+    this.register = this.register.bind(this);
+    this.login = this.login.bind(this);
+  };
   
   /* 
   * Get user data from localStorage */
-  var loadData = function() {
+  loadData() {
     var stringUsers = localStorage.getItem('users');
     var temp_users = [];
 
@@ -44,7 +57,7 @@ var AuthAPI = new (function() {
 
   /* 
   * Save user data to localStorage */
-  var saveData = function(_users) {
+  saveData(_users) {
     if ($.isArray(_users)) {
       localStorage.setItem('users', JSON.stringify(_users));
       return _users;
@@ -54,10 +67,10 @@ var AuthAPI = new (function() {
 
   /* 
   * Check if the username is existed */
-  var isExist = function(_username) {
+  isExist(_username) {
     // Check if the data array is loaded
-    if (users.length === 0) {
-      users = loadData();
+    if (this.users.length === 0) {
+      this.users = this.loadData();
     }
 
     /* 
@@ -68,7 +81,7 @@ var AuthAPI = new (function() {
     * 
     * More: 
     *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some */
-    return users.some((_user) => {
+    return this.users.some((_user) => {
       return _user.username === _username;
     });
   };
@@ -76,10 +89,10 @@ var AuthAPI = new (function() {
 
   /* 
   * Find user by username */
-  var findUser = function(_username) {
+  findUser(_username) {
     // Check if the data array is loaded
-    if (users.length === 0) {
-      users = loadData();
+    if (this.users.length === 0) {
+      this.users = this.loadData();
     }
 
     /* 
@@ -92,17 +105,17 @@ var AuthAPI = new (function() {
     * 
     * More informations: 
     *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find */
-    return users.find((_user) => {
+    return this.users.find((_user) => {
       return _user.username === _username;
     });
   };
 
   /* 
   * Find user by username */
-  var findUserById = function(_id) {
+  findUserById(_id) {
     // Check if the data array is loaded
-    if (users.length === 0) {
-      users = loadData();
+    if (this.users.length === 0) {
+      this.users = this.loadData();
     }
 
     /* 
@@ -115,7 +128,7 @@ var AuthAPI = new (function() {
     * 
     * More informations: 
     *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find */
-    return users.find((_user) => {
+    return this.users.find((_user) => {
       return _user.id === _id;
     });
   };
@@ -123,24 +136,24 @@ var AuthAPI = new (function() {
 
   /* 
   * Check if user is logged in */
-  _AuthAPI.isLoggedIn = function() {
+  isLoggedIn() {
     return !(localStorage.getItem('currentUser') === null);
   };
 
 
   /* 
   * Get current user id */
-  _AuthAPI.getCurrentUserId = function() {
+  getCurrentUserId() {
     return localStorage.getItem('currentUser');
   };
 
   /* 
   * Get current username */
-  _AuthAPI.getCurrentUserName = function() {
+  getCurrentUserName() {
     
     // Find id and user
-    var currentUserId = _AuthAPI.getCurrentUserId();
-    var currentUser = findUserById(currentUserId);
+    var currentUserId = this.getCurrentUserId();
+    var currentUser = this.findUserById(currentUserId);
 
     // Checking found result
     if (typeof currentUser === 'object') {
@@ -153,21 +166,21 @@ var AuthAPI = new (function() {
 
   /* 
   * Logout for user by delete currentUser information */
-  _AuthAPI.logout = function() {
+  logout() {
     localStorage.removeItem('currentUser');
   };
 
 
   /* 
   * Register for user */
-  _AuthAPI.register = function(_user) {
+  register(_user) {
     // Check if the _user parameter is valid
     if (_user.username.length > 0 && _user.password.length > 0) {
       // Check if the username is existed
-      if (!isExist(_user.username)) {
+      if (!this.isExist(_user.username)) {
         // Check if the data array is loaded
-        if (users.length === 0) {
-          users = loadData();
+        if (this.users.length === 0) {
+          this.users = this.loadData();
         }
         
         // Create random salt
@@ -182,10 +195,10 @@ var AuthAPI = new (function() {
         };
         
         // Push new user to data array
-        users.push(newUser);
+        this.users.push(newUser);
         
         // Save new data to localStorage
-        saveData(users);
+        this.saveData(this.users);
 
         return true;
 
@@ -201,11 +214,11 @@ var AuthAPI = new (function() {
 
   /* 
   * Login for user */
-  _AuthAPI.login = function(_user) {
+  login(_user) {
     // Check if the _user parameter is valid
     if (_user.username.length > 0 && _user.password.length > 0) {
       // Find user in data
-      var user = findUser(_user.username);
+      var user = this.findUser(_user.username);
 
       if (user && typeof user === 'object') {
         // Get salt
@@ -234,4 +247,4 @@ var AuthAPI = new (function() {
 
 /* 
 * Export the API */
-module.exports = AuthAPI;
+export default AuthAPI;

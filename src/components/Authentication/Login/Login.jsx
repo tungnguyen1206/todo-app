@@ -1,39 +1,48 @@
 /* 
 * Require react, react-router hashHistory */
-var React = require('react');
-var {hashHistory} = require('react-router');
+import React from 'react';
+import {hashHistory} from 'react-router';
 
 /* 
 * Require other components */
-var LoginForm = require('./LoginForm');
+import LoginForm from './LoginForm';
 
 /* 
 * Require APIs */
-var AuthAPI = require('../../../api/AuthAPI');
+import AuthAPI from '../../../api/AuthAPI';
 
 /*
 * Define component */
-var Login = React.createClass({
+class Login extends React.Component {
 
   /* 
-  * Get initial state */
-  getInitialState: function() {
-    return {
-      loginError: false
+  * Constructor */
+  constructor(props) {
+    super(props);
+
+    // Bind handle event methods to this component
+    this.loginFor = this.loginFor.bind(this);
+
+    // Bind optional render methods
+    this.renderErrorAlert = this.renderErrorAlert.bind(this);
+
+    // Initial state
+    this.state = {
+      loginError: false      
     };
-  },
+  };
 
   /* 
   * Redirect if user is logged in */
-  componentWillMount: function() {
+  componentWillMount() {
     if(AuthAPI.isLoggedIn()) {
       hashHistory.push('/todos');
     }
-  },
+  };
 
   /* 
   * Handle when user login */
-  loginFor: function(_user) {
+  loginFor(_user) {
 
     if (AuthAPI.login(_user)) {
       // Auto redirect to TodoApp
@@ -47,33 +56,33 @@ var Login = React.createClass({
       console.log('Login failed');
     }
 
-  },
+  };
+
+  /* 
+  * Render error alert */
+  renderErrorAlert() {
+    if (this.state.loginError) {
+      return (
+        <div className="alert alert-danger alert-dismissible fade show alert-login-error" role="alert">
+          Login failed! Incorrect username or password.
+          <button 
+            type="button"
+            className="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span className="oi oi-x dissmis-login-alert-button" aria-hidden="true" />
+          </button> 
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
 
   /* 
   * Render component */
-  render: function() {
-    // Avoid 'this'
-    var _Login = this;
-
-    // Render error alert
-    var renderErrorAlert = function() {
-      if (_Login.state.loginError) {
-        return (
-          <div className="alert alert-danger alert-dismissible fade show alert-login-error" role="alert">
-            Login failed! Incorrect username or password.
-            <button type="button"
-                    className="close"
-                    data-dismiss="alert"
-                    aria-label="Close">
-              <span className="oi oi-x dissmis-login-alert-button" aria-hidden="true"></span>
-            </button> 
-          </div>
-        );
-      } else {
-        // return ();
-      }
-    };
-    
+  render() {
     return (
       <div>
 
@@ -84,21 +93,21 @@ var Login = React.createClass({
             
             <div className="row">
               <div className="col-10 offset-1">
-                {renderErrorAlert()}
+                {this.renderErrorAlert()}
               </div>
             </div> 
             
-            <LoginForm onLogin={_Login.loginFor}/>
+            <LoginForm onLogin={this.loginFor} />
             
           </div>
         </div>
 
       </div>
     );
-  }
-});
+  };
+};
 
 
 /* 
 * Export the component */
-module.exports = Login;
+export default Login;

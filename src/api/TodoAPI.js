@@ -1,30 +1,47 @@
 /* 
 * Require jQuery */
-var $ = require('jquery');
+import $ from 'jquery';
 
 /* 
 * This API is used to store and retrieve array of data from local storage
 * module.exports is an object
 * */
-var TodoAPI = new (function() {
+let TodoAPI = new (class {
 
-  // Avoid 'this'
-  var _TodoAPI = this;
+  /* 
+  * Class constructor */
+  constructor() {
+    // This variable store identifier, for multiple user
+    this.registeredName = undefined;
 
-  // This variable store identifier, for multiple user
-  var registeredName = undefined;
+    // This variable store all todos of user
+    this.todos = [];
 
-  // This variable store all todos of user
-  var todos = [];
+    // Bind for all methods
+    this.loadTodos = this.loadTodos.bind(this);
+    this.saveTodos = this.saveTodos.bind(this);
+
+    this.registerStorage = this.registerStorage.bind(this);
+    this.logoutStorage = this.logoutStorage.bind(this);
+
+    this.getTodos = this.getTodos.bind(this);
+    this.setTodos = this.setTodos.bind(this);
+    this.filterTodos = this.filterTodos.bind(this);
+
+    this.getTodoById = this.getTodoById.bind(this);
+    this.updateTodoById = this.updateTodoById.bind(this);
+    this.deleteTodoById = this.deleteTodoById.bind(this);
+  };
+
 
   /* 
   * Private method: load todos if it hasn't loaded */
-  var loadTodos = function() {
+  loadTodos() {
     // Check if the storage is registered
-    if (typeof registeredName === 'string' && registeredName.length > 0) {
+    if (typeof this.registeredName === 'string' && this.registeredName.length > 0) {
       // Check if the todos has loaded
-      if (todos.length === 0) {
-        var stringTodos = localStorage.getItem(registeredName);
+      if (this.todos.length === 0) {
+        var stringTodos = localStorage.getItem(this.registeredName);
         var _todos = [];
         
         // Handling errors
@@ -36,10 +53,10 @@ var TodoAPI = new (function() {
         
         // Check the result
         if ($.isArray(_todos)) {
-          todos = _todos;
+          this.todos = _todos;
           return true;
         } else {
-          todos = [];
+          this.todos = [];
           return false;
         }
       // Todos has loaded, return true
@@ -54,10 +71,10 @@ var TodoAPI = new (function() {
 
   /* 
   * Private method: save todos from RAM to localStorage */
-  var saveTodos = function() {
+  saveTodos() {
     // Check if the storage is registered
-    if (typeof registeredName === 'string' && registeredName.length > 0) {
-      localStorage.setItem(registeredName, JSON.stringify(todos));
+    if (typeof this.registeredName === 'string' && this.registeredName.length > 0) {
+      localStorage.setItem(this.registeredName, JSON.stringify(this.todos));
       return true;
     // Storage has not registered yet, return false
     } else {
@@ -67,31 +84,31 @@ var TodoAPI = new (function() {
 
   /* 
   * Register to use localStorage */
-  _TodoAPI.registerStorage = function(_storageName) {
+  registerStorage(_storageName) {
     // Checking valid input
     if (typeof _storageName === 'string' && _storageName.length > 0) {
-      registeredName = _storageName;
+      this.registeredName = _storageName;
     } else {
-      registeredName = undefined;
+      this.registeredName = undefined;
     }
   };
 
 
   /* 
   * Logout from localStorage */
-  _TodoAPI.logoutStorage = function() {
-    registeredName = undefined;
-    todos = [];
+  logoutStorage() {
+    this.registeredName = undefined;
+    this.todos = [];
   };
 
   /* 
   * Set todos to local storage */
-  _TodoAPI.setTodos = function(_todos) {
+  setTodos(_todos) {
     if ($.isArray(_todos)) {
       // Update to RAM
-      todos = _todos;
+      this.todos = _todos;
       // Save to localStorage
-      if(saveTodos()) {
+      if(this.saveTodos()) {
         return _todos;
       } else {
         return null;
@@ -104,10 +121,10 @@ var TodoAPI = new (function() {
 
   /* 
   * Get todo from local storage */
-  _TodoAPI.getTodos = function() {
+  getTodos() {
     // Check if load successful
-    if (loadTodos()) {
-      return todos;
+    if (this.loadTodos()) {
+      return this.todos;
     } else {
       return [];
     }
@@ -115,7 +132,7 @@ var TodoAPI = new (function() {
 
   /* 
   * Filt todos array result */
-  _TodoAPI.filterTodos = function(_todos, _showCompleted, _searchText) {
+  filterTodos(_todos, _showCompleted, _searchText) {
     if ($.isArray(_todos)) {
 
       var filteredTodos = _todos;
@@ -184,8 +201,6 @@ var TodoAPI = new (function() {
         return todoA.completed - todoB.completed;
       });
 
-
-
       return filteredTodos;
     
     // Invalid todos array input
@@ -196,14 +211,14 @@ var TodoAPI = new (function() {
 
   /* 
   * Find todo with specific id */
-  _TodoAPI.getTodoById = function(_id) {
+  getTodoById(_id) {
     // Check if the _id parameter is valid
     if (typeof _id === 'string') {
 
       // Get list of todos: an array
-      if (loadTodos()) {
+      if (this.loadTodos()) {
         // Check if the array is empty
-        if (todos.length > 0) { 
+        if (this.todos.length > 0) { 
           /* 
           * Find in array and get the first match result
           * 
@@ -214,7 +229,7 @@ var TodoAPI = new (function() {
           * 
           * More informations: 
           *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find */
-          return todos.find((_todo) => {
+          return this.todos.find((_todo) => {
             return (_todo.id === _id);
           });
           
@@ -234,13 +249,13 @@ var TodoAPI = new (function() {
 
   /* 
   * Find todo with specific id and update its value */
-  _TodoAPI.updateTodoById = function(_id, _newTodo) {
+  updateTodoById(_id, _newTodo) {
     // Check if the parameters is valid
     if (typeof _id === 'string' && typeof _newTodo === 'object') {
       // Get list of todos: an array
-      if (loadTodos()) {
+      if (this.loadTodos()) {
         // Check if the data array is empty
-        if (todos.length > 0) { 
+        if (this.todos.length > 0) { 
           /* 
           * Find in array and get the index of first match result
           * 
@@ -251,16 +266,16 @@ var TodoAPI = new (function() {
           * 
           * More informations: 
           * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex */
-          var needToUpdate = todos.findIndex((_todo) => {
+          var needToUpdate = this.todos.findIndex((_todo) => {
             return (_todo.id === _id);
           });
           
           // Update the element
-          todos[needToUpdate] = _newTodo;
+          this.todos[needToUpdate] = _newTodo;
           
           // Set data back to localStorage
-          saveTodos();
-          return todos[needToUpdate];
+          this.saveTodos();
+          return this.todos[needToUpdate];
 
         // if todos array is empty
         } else {
@@ -277,14 +292,14 @@ var TodoAPI = new (function() {
 
   /* 
   * Delete todo by it's id */
-  _TodoAPI.deleteTodoById = function(_id) {
+  deleteTodoById(_id) {
     // Check if the _id parameter is valid
     if (typeof _id === 'string') {
 
       // Get list of todos: an array
-      if (loadTodos()) {
+      if (this.loadTodos()) {
         // Check if the array is empty
-        if (todos.length > 0) { 
+        if (this.todos.length > 0) { 
           /* 
           * Find in array and get the index of first match result
           * 
@@ -295,7 +310,7 @@ var TodoAPI = new (function() {
           * 
           * More informations: 
           *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex */
-          var indexOfDelete = todos.findIndex((_todo) => {
+          var indexOfDelete = this.todos.findIndex((_todo) => {
             return (_todo.id === _id);
           });
 
@@ -309,9 +324,9 @@ var TodoAPI = new (function() {
           *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice */
           if (indexOfDelete > -1) {
             // From indexOfDelete, delete one element 
-            todos.splice(indexOfDelete, 1);
+            this.todos.splice(indexOfDelete, 1);
             // Update to localStorage
-            saveTodos();
+            this.saveTodos();
             return true;
           // Element not found
           } else {
@@ -336,4 +351,4 @@ var TodoAPI = new (function() {
 
 /* 
 * Export the module */
-module.exports = TodoAPI;
+export default TodoAPI;

@@ -1,70 +1,71 @@
 /* 
 * Require react, react-router */
-var React = require('react');
-var {hashHistory} = require('react-router');
+import React from 'react';
+import {hashHistory} from 'react-router';
 
 /* 
 * Require moment */
-var moment = require('moment');
+import moment from 'moment';
 
 /* 
 * Require components */
-var TodoInfo = require('./TodoInfo');
-var TodoControls = require('./TodoControls');
+import TodoInfo from './TodoInfo';
+import TodoControls from './TodoControls';
 
 /* 
 * Require APIs */
-var TodoAPI = require('../../api/TodoAPI');
-var AuthAPI = require('../../api/AuthAPI');
+import TodoAPI from '../../api/TodoAPI';
+import AuthAPI from '../../api/AuthAPI';
 
 /* 
 * Define Todo component */
-var TodoDetails = React.createClass({
+class TodoDetails extends React.Component {
 
   /* 
-  * Initial state */
-  getInitialState: function() {
-    return {
+  * Constructor */
+  constructor(props) {
+    super(props);
+
+    // Bind handle event methods to this component
+    this.onUpdateCompleted = this.onUpdateCompleted.bind(this);
+
+    // Initial state
+    this.state = {
       todo: {},
     };
-  },
+  };
 
   /* 
   * Redirect if user is not logged in */
-  componentWillMount: function() {
-    // Avoid 'this'
-    var _TodoDetails = this;
-
+  componentWillMount() {
+    // Check login state
     if (!AuthAPI.isLoggedIn()) {
       hashHistory.push('/login');
     } else {
       // Register storage
       TodoAPI.registerStorage(AuthAPI.getCurrentUserId());
       // Get id from URL parameter
-      var _id = _TodoDetails.props.params.todoid;
+      var _id = this.props.params.todoid;
       // Init state
-      _TodoDetails.setState({
+      this.setState({
         todo: TodoAPI.getTodoById(_id),
       });
     }  
-},
+  };
 
   /* 
   * Update localStorage with new data before the component unmount */
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     var _newTodo = this.state.todo;
     var _id = _newTodo.id;
     TodoAPI.updateTodoById(_id, _newTodo);
-  },
+  };
 
   /* 
   * Handle when user clicks on Complete button */
-  onUpdateCompleted: function() {
-    // Avoid 'this'
-    var _TodoDetails = this;
-    
+  onUpdateCompleted() {
     // Get old values
-    var _oldTodo = _TodoDetails.state.todo;
+    var _oldTodo = this.state.todo;
     var _oldCompleted = _oldTodo.completed;
 
     // Change completed and completedAt
@@ -77,16 +78,14 @@ var TodoDetails = React.createClass({
         completedAt: (!_oldCompleted) ? moment().unix() : undefined,
       }
     });
-  },
+  };
 
 
   /* Render the component */
-  render: function() {
-    // Avoid 'this'
-    var _TodoDetails = this;
+  render() {
 
     // Get value of state
-    var todo = _TodoDetails.state.todo;
+    var todo = this.state.todo;
 
     return ( 
       <div>
@@ -95,17 +94,19 @@ var TodoDetails = React.createClass({
 
         <div className="row">
           <div className="container col-xs-10 col-md-6 col-lg-4 col-xs-offset-1 col-md-offset-3 col-lg-offset-4">
-            <TodoInfo todo={todo}/>
-            <TodoControls completedState={todo.completed} 
-                          onUpdateStatus={_TodoDetails.onUpdateCompleted}/>
+            <TodoInfo todo={todo} />
+            <TodoControls 
+              completedState={todo.completed} 
+              onUpdateStatus={this.onUpdateCompleted}
+            />
           </div>
         </div>
 
       </div>
     );
-  }
-});
+  };
+};
 
 /* 
 * Export the component */
-module.exports = TodoDetails;
+export default TodoDetails;
