@@ -23,12 +23,16 @@ let AuthAPI = new (class {
     // Bind for all methods
     this.loadData = this.loadData.bind(this);
     this.saveData = this.saveData.bind(this);
+
     this.isExist = this.isExist.bind(this);
+
     this.findUser = this.findUser.bind(this);
     this.findUserById = this.findUserById.bind(this);
+
     this.isLoggedIn = this.isLoggedIn.bind(this);
     this.getCurrentUserId = this.getCurrentUserId.bind(this);
     this.getCurrentUserName = this.getCurrentUserName.bind(this);
+
     this.logout = this.logout.bind(this);
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
@@ -174,39 +178,50 @@ let AuthAPI = new (class {
   /* 
   * Register for user */
   register(_user) {
-    // Check if the _user parameter is valid
-    if (_user.username.length > 0 && _user.password.length > 0) {
-      // Check if the username is existed
-      if (!this.isExist(_user.username)) {
-        // Check if the data array is loaded
-        if (this.users.length === 0) {
-          this.users = this.loadData();
+    if (typeof _user.username === 'string') {
+
+      // Trim the username
+      _user.username = _user.username.trim();  
+
+      // Check if the _user parameter is valid
+      if (_user.username.length > 0 && _user.password.length > 0) {
+        // Check if the username is existed
+        if (!this.isExist(_user.username)) {
+          // Check if the data array is loaded
+          if (this.users.length === 0) {
+            this.users = this.loadData();
+          }
+          
+          // Create random salt
+          var _salt = crypto.randomBytes(16).toString('hex');
+          
+          // Define new user
+          var newUser = {
+            id: uuid(),
+            username: _user.username,
+            hashPassword: crypto.createHash('md5').update(_user.password + _salt).digest('hex'),
+            salt: _salt
+          };
+          
+          // Push new user to data array
+          this.users.push(newUser);
+          
+          // Save new data to localStorage
+          this.saveData(this.users);
+          
+          return true;
+          
+        // The username is existed
+        } else {
+          return false;
         }
-        
-        // Create random salt
-        var _salt = crypto.randomBytes(16).toString('hex');
-        
-        // Define new user
-        var newUser = {
-          id: uuid(),
-          username: _user.username,
-          hashPassword: crypto.createHash('md5').update(_user.password + _salt).digest('hex'),
-          salt: _salt
-        };
-        
-        // Push new user to data array
-        this.users.push(newUser);
-        
-        // Save new data to localStorage
-        this.saveData(this.users);
 
-        return true;
-
-      // The username is existed
+      // Invalid input
       } else {
         return false;
       }
-    // Invalid input
+
+    // username is not a string
     } else {
       return false;
     }
@@ -215,32 +230,45 @@ let AuthAPI = new (class {
   /* 
   * Login for user */
   login(_user) {
-    // Check if the _user parameter is valid
-    if (_user.username.length > 0 && _user.password.length > 0) {
-      // Find user in data
-      var user = this.findUser(_user.username);
 
-      if (user && typeof user === 'object') {
-        // Get salt
-        var _salt = user.salt;
-        // Calculate the hashPassword 
-        var _hashPassword = crypto.createHash('md5').update(_user.password + _salt).digest('hex');
-        // Verify the password
-        if (user.hashPassword === _hashPassword) {
-          localStorage.setItem('currentUser', user.id);
-          return true;
+    if (typeof _user.username === 'string') {
+      // Trim the username
+      _user.username = _user.username.trim();
+
+      // Check if the _user parameter is valid
+      if (_user.username.length > 0 && _user.password.length > 0) {
+        // Find user in data
+        var user = this.findUser(_user.username);
+
+        if (user && typeof user === 'object') {
+          // Get salt
+          var _salt = user.salt;
+          // Calculate the hashPassword 
+          var _hashPassword = crypto.createHash('md5').update(_user.password + _salt).digest('hex');
+          // Verify the password
+          if (user.hashPassword === _hashPassword) {
+            localStorage.setItem('currentUser', user.id);
+            return true;
+          } else {
+            return false;
+          }
+          
+        // If user is not exist
         } else {
           return false;
         }
-      // If user is not exist
+
+      // Invalid input
       } else {
         return false;
       }
 
-    // Invalid input
+    // if username is not a string 
     } else {
       return false;
     }
+
+      
   }
 })();
 
